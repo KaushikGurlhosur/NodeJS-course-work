@@ -3,10 +3,21 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const { engine } = require("express-handlebars"); // Import express-handlebars
+
 const app = express();
 
-app.set("view engine", "pug"); // Set the view engine to Pug - Template engine
+// Set up the view engine - for handlebars - 3 lines below
+app.engine(
+  "handlebars",
+  engine({ layoutsDir: "views/layouts", defaultLayout: "main-layout" })
+); // Set the view engine to Handlebars
+app.set("view engine", "handlebars"); // Set the view engine to Handlebars
 app.set("views", "views"); // Set the views directory
+
+// Set up the view engine - for pug - 2 lines below
+// app.set("view engine", "pug"); // Set the view engine to Pug - Template engine
+// app.set("views", "views"); // Set the views directory
 
 const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
