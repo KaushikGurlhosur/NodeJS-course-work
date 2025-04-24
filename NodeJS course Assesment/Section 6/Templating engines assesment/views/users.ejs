@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/users">Users</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Users</h1>
+    <% if(users.length) { %> <% for(let user of users) { %>
+    <h4><%= user.name %></h4>
+    <% } %> <% } else { %>
+    <p>No users found.</p>
+    <% } %>
+  </body>
+</html>

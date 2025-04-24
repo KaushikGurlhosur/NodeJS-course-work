@@ -1,7 +1,7 @@
 const path = require("path");
 
 const express = require("express");
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser"); // used to parse the body of the request
 
 const { engine } = require("express-handlebars"); // Import express-handlebars
 
