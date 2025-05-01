@@ -1,4 +1,3 @@
-const { fileLoader } = require("ejs");
 const fs = require("fs");
 const path = require("path");
 
@@ -36,7 +35,30 @@ module.exports = class Cart {
         console.log(err);
       });
     });
+  }
 
-    // Add new product / increase quantity
+  static deleteProduct(id, productPrice) {
+    fs.readFile(p, (err, fileContent) => {
+      if (err) {
+        return;
+      }
+      const updatedCart = { ...JSON.parse(fileContent) };
+
+      const product =
+        updatedCart.products.find((prod) => prod.id === id) || null;
+      if (product == null) {
+        return console.log("product not in cart");
+      }
+
+      const productQty = product.qty;
+
+      updatedCart.totalPrice -= productPrice * productQty;
+      updatedCart.products = updatedCart.products.filter(
+        (prod) => prod.id !== id
+      );
+      fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
+        console.log(err);
+      });
+    });
   }
 };
