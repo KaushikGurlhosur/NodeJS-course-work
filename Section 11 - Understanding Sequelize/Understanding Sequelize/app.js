@@ -15,6 +15,8 @@ app.set("views", "views"); // Set the views directory
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const Product = require("./models/product");
+const User = require("./models/user");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,8 +26,11 @@ app.use(shopRoutes);
 
 app.use(errorController.get404); // 404 page
 
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" }); // A product belongs to a user and One user can have many products
+User.hasMany(Product); // A user can have many products
+
 sequelize
-  .sync()
+  .sync({ force: true }) // force: true will drop the table if it already exists
   .then((result) => {
     app.listen(3000);
   })
