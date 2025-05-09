@@ -22,7 +22,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findByPk(1);
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use("/admin", adminRoutes);
@@ -44,13 +51,12 @@ sequelize
       return User.create({ name: "Kaushik", email: "test@test.com" });
     }
     // return Promise.resolve(user);
-    return user;
+    return user; // If you return in a then block its automatically considered as new Promise
   })
   .then((user) => {
     // console.log(user);
     app.listen(3000);
   })
-
   .catch((err) => {
     console.log(err);
   });
