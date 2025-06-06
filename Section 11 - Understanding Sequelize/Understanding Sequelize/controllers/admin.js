@@ -15,7 +15,7 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
   const price = req.body.price;
-  req.user.createProduct();
+  // req.user.createProduct();
 
   Product.create({
     title: title,
@@ -97,6 +97,8 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.findAll()
+    // req.user
+    //   .getProducts()
     .then((products) => {
       res.render("admin/products", {
         pageTitle: "Admin Products",
