@@ -198,10 +198,26 @@ form {
   border-radius: 3px;
   cursor: pointer;
 }
+.danger {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid #e75026;
+  color: #d83118;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
 
 .btn:hover,
 .btn:active {
   background-color: #00695c;
+  color: white;
+}
+.danger:hover,
+.danger:active {
+  background-color: #dc2121;
   color: white;
 }
 
