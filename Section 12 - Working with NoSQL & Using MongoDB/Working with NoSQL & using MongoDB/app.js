@@ -14,7 +14,7 @@ const app = express();
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
 app.set("views", "views"); // Set the views directory
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 // const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,12 +22,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {});
 
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(shopRoutes);
 
 app.use(errorController.get404); // 404 page
 
-mongoConnect((client) => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(3000);
 });
