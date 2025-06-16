@@ -35,7 +35,7 @@ exports.getProduct = (req, res, next) => {
 
   // ANOTHER way to get the product by id
 
-  Product.findByPk(prodId)
+  Product.findById(prodId)
     .then((product) => {
       res.render("shop/product-detail", {
         pageTitle: product.title,
