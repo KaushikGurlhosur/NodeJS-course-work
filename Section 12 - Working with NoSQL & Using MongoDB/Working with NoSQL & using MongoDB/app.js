@@ -8,6 +8,8 @@ const errorController = require("./controllers/error");
 
 const mongoConnect = require("./util/database").mongoConnect;
 
+const User = require("./models/user"); // Import User model
+
 const app = express();
 
 // Set up the view engine - for ejs - 3 lines below
@@ -21,6 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
+  User.findById("6852b55e0675d384561127bd").then((user) => {
+    req.user = user; // Attach user to the request object
+    next(); // Call next middleware
+  });
   next();
 });
 
