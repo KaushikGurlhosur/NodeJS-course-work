@@ -8,7 +8,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new mongodb.ObjectId(id); // _id is a special property in MongoDB
+    this._id = id ? new mongodb.ObjectId(id) : null; // _id is a special property in MongoDB
   }
 
   save() {
