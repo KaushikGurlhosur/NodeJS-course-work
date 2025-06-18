@@ -27,7 +27,6 @@ app.use((req, res, next) => {
     req.user = user; // Attach user to the request object
     next(); // Call next middleware
   });
-  next();
 });
 
 app.use("/admin", adminRoutes);
