@@ -28,7 +28,9 @@ class User {
     //   return cp._id === product._id;
     // });
     product.quantity = 1; // setting quantity to 1 for the new product /
-    const updateCart = { items: [{ ...product, quantity: 1 }] };
+    const updateCart = {
+      items: [{ productId: new mongodb.ObjectId(product._id), quantity: 1 }],
+    };
     const db = getDb();
     return db
       .collection("users")
