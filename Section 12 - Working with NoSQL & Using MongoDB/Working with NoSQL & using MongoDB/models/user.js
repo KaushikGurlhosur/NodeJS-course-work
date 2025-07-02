@@ -3,8 +3,8 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class User {
-  constructor(username, email, cart, id) {
-    this.username = username;
+  constructor(name, email, cart, id) {
+    this.name = name;
     this.email = email;
     this.cart = cart; // {items: []}
     this.id = id;
@@ -90,9 +90,18 @@ class User {
 
   addOrder() {
     const db = getDb();
-    return db
-      .collection("orders")
-      .insertOne(this.cart)
+    return this.getCart()
+      .then((products) => {
+        const order = {
+          items: products,
+          user: {
+            _id: new mongodb.ObjectId(this.id),
+            name: this.username,
+            email: this.email,
+          },
+        };
+        return db.collection("orders").insertOne(order);
+      })
       .then((result) => {
         this.cart = { items: [] }; // Clear the cart after order is placed in the user model and below code will update the cart in the database
 
@@ -103,6 +112,11 @@ class User {
           { $set: { cart: { items: [] } } }
         );
       });
+  }
+
+  getOrders() {
+    const db = getDb();
+    return db.collection("orders").find({});
   }
 
   static findById(userId) {

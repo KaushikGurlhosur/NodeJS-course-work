@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
   User.findById("6852b55e0675d384561127bd").then((user) => {
-    req.user = new User(user.username, user.email, user.cart, user._id);
+    req.user = new User(user.name, user.email, user.cart, user._id);
     next(); // Call next middleware
   });
 });
