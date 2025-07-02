@@ -88,6 +88,23 @@ class User {
       );
   }
 
+  addOrder() {
+    const db = getDb();
+    return db
+      .collection("orders")
+      .insertOne(this.cart)
+      .then((result) => {
+        this.cart = { items: [] }; // Clear the cart after order is placed in the user model and below code will update the cart in the database
+
+        return db.collection("users").updateOne(
+          {
+            _id: new mongodb.ObjectId(this.id),
+          },
+          { $set: { cart: { items: [] } } }
+        );
+      });
+  }
+
   static findById(userId) {
     const db = getDb();
     return db
