@@ -2,6 +2,7 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 // const { engine } = require("express-handlebars"); // Import express-handlebars
 const errorController = require("./controllers/error");
@@ -34,6 +35,20 @@ app.use(shopRoutes);
 
 app.use(errorController.get404); // 404 page
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+// mongoConnect(() => {
+//   app.listen(3000);
+// });
+
+// Now instead of the above line, we will connect to MongoDB using mongoose
+mongoose
+  .connect(
+    "URL_TO_YOUR_MONGODB_DATABASE" // Replace with your MongoDB connection string
+  )
+  .then((result) => {
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
