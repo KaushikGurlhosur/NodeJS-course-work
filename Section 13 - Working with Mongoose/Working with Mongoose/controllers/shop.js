@@ -2,7 +2,6 @@ const Product = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .lean()
     .then((products) => {
       console.log(products);
       res.render("shop/product-list", {
@@ -19,22 +18,7 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  //One way to get the product by id
-
-  // Product.findAll({ Where: { id: prodId } })
-  //   .then((products) => {
-  //     res.render("shop/product-detail", {
-  //       pageTitle: products[0].title,
-  //       product: products[0],
-  //       path: "/products",
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-
-  // ANOTHER way to get the product by id
-
+  // findById is from mongoose and we can pass a string and it will convert it to an ObjectId
   Product.findById(prodId)
     .then((product) => {
       res.render("shop/product-detail", {
