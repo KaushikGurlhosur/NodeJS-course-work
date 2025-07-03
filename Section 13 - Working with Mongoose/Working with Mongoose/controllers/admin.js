@@ -86,7 +86,7 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId)
+  Product.findByIdAndDelete(prodId) //findByIdAndDelete is a Mongoose method that deletes the product by its ID
     .then(() => {
       console.log("DESTROYED PRODUCT");
       res.redirect("/admin/products");
