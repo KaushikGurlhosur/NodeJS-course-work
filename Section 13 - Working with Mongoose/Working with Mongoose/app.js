@@ -7,8 +7,6 @@ const mongoose = require("mongoose");
 // const { engine } = require("express-handlebars"); // Import express-handlebars
 const errorController = require("./controllers/error");
 
-const mongoConnect = require("./util/database").mongoConnect;
-
 const User = require("./models/user"); // Import User model
 
 const app = express();
@@ -24,10 +22,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findById("6852b55e0675d384561127bd").then((user) => {
-    req.user = new User(user.name, user.email, user.cart, user._id);
-    next(); // Call next middleware
-  });
+  User.findById("6852b55e0675d384561127bd")
+    .then((user) => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      next(); // Call next middleware
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use("/admin", adminRoutes);
@@ -42,7 +44,7 @@ app.use(errorController.get404); // 404 page
 // Now instead of the above line, we will connect to MongoDB using mongoose
 mongoose
   .connect(
-    "URL_TO_YOUR_MONGODB_DATABASE" // Replace with your MongoDB connection string
+    "mongodb+srv://kaushikGurlhosur:depcy5-fermuw-nyGvaz@cluster0.jpqdz3m.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0" // Replace with your MongoDB connection string
   )
   .then((result) => {
     app.listen(3000, () => {
