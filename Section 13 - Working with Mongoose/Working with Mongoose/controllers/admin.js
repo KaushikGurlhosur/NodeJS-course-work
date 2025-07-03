@@ -16,19 +16,17 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const price = req.body.price;
 
-  const product = new Product(
-    title,
-    price,
-    description,
-    imageUrl,
-    null,
-    req.user._id
-  ); // null for id, as it will be created by MongoDB
+  const product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  });
 
   // req.user.createProduct();
 
   product
-    .save()
+    .save() // This is coming from Mongoose
     .then((result) => {
       // console.log(result);
       console.log("Created Product");
