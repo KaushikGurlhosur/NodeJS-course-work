@@ -99,7 +99,10 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+    // .select("title price -_id") // here we are getting only title and price, and adding - to _id to exclude it.
+    // .populate("userId", "name") // this gives the entire user object - with name, email.
     .then((products) => {
+      console.log(products);
       res.render("admin/products", {
         pageTitle: "Admin Products",
         path: "/admin/products",

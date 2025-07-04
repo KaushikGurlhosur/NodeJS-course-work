@@ -12,7 +12,7 @@ router.get("/products/:productId", shopController.getProduct); // productId is a
 
 // router.get("/cart", shopController.getCart);
 
-// router.post("/cart", shopController.postCart); // this is the route for the cart post request
+router.post("/cart", shopController.postCart); // this is the route for the cart post request
 
 // router.post("/cart-delete-item", shopController.postCartDeleteProduct);
 
