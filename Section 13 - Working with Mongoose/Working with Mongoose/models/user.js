@@ -75,24 +75,10 @@ userSchema.methods.removeFromCart = function (productId) {
   return this.save();
 };
 
-// userSchema.methods.placeOrder = function () {
-//   return this.getCart()
-//     .then((products) => {
-//       const order = {
-//         items: products,
-//         user: {
-//           _id: this.id,
-//           name: this.name,
-//           email: this.email,
-//         },
-//       };
-//       return new Order(order).save();
-//     })
-//     .then((result) => {
-//       this.cart = { items: [] };
-//       return this.save();
-//     });
-// };
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  return this.save();
+};
 
 module.exports = mongoose.model("User", userSchema);
 

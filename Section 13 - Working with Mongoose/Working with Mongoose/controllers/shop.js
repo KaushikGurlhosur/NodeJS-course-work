@@ -123,11 +123,12 @@ exports.postOrder = (req, res, next) => {
       });
       order.save();
     })
+    // .then(() => {
+    //   req.user.cart = { items: [] };
+    //   return req.user.save();
+    // })
     .then(() => {
-      req.user.cart = { items: [] };
-      return req.user.save();
-    })
-    .then(() => {
+      req.user.clearCart();
       res.redirect("/orders");
     })
     .catch((err) => console.log(err));
