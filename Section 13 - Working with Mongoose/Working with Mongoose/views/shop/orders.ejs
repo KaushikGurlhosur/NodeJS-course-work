@@ -9,18 +9,33 @@
         <h1>Nothing There!</h1>
         <% } else { %>
             <ul>
-                <% orders.forEach(order => { %>
+                <% orders.forEach(order => { 
+                    let total = 0;
+                    %>
+                    
+                   
                     <li>
                         <h1> Order : # <%= order._id %></h1>
                         <ul>
-                            <% order.products.forEach(product => { %>
+                            <% order.products.forEach(product => { 
+                                  total += product.product.price * product.quantity;
+                                %>
+                               
                                 <li>
                                     <%= product.product.title %> (<%= product.quantity %>)
                                 </li>
+
+                              
+
                                 <% }) %>
-                        </ul>
-                    </li>
-              <% }) %>
+                            </ul>
+                               <li>  
+                                    <strong>Total: $ <%= total.toFixed(2) %> </strong>
+                            </li>
+                        </li>
+                        <% }) %>
+                     
+
             </ul>
         <% } %>
     </main>
