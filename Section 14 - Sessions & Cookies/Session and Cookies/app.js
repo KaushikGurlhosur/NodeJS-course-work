@@ -4,6 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const session = require("express-session");
+
 // const { engine } = require("express-handlebars"); // Import express-handlebars
 const errorController = require("./controllers/error");
 
@@ -21,6 +23,10 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  session({ secret: "my secret", resave: false, saveUninitialized: false }) // Also can configure a cookie.
+);
 
 app.use((req, res, next) => {
   User.findById("68678dedaea895862f1059eb")
