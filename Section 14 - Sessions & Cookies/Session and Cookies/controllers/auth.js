@@ -10,5 +10,9 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   res.setHeader("Set-Cookie", "loggedIn=true");
+  //   res.setHeader("Set-Cookie", "loggedIn=true; Max-Age=10"); // Adding multiple
+  //   res.setHeader("Set-Cookie", "loggedIn=true; Secure"); // For https
+  //   res.setHeader("Set-Cookie", "loggedIn=true; HttpOnly"); // for http
+  //   res.setHeader("Set-Cookie", "loggedIn=true; Domain=..."); // Where he cookie needs to be sent - for tracking purposes
   res.redirect("/");
 };
