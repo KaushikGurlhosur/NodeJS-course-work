@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 
 const session = require("express-session");
 
+const csrf = require("csurf");
+
 const MongoDBStore = require("connect-mongodb-session")(session);
 
 // const { engine } = require("express-handlebars"); // Import express-handlebars
@@ -22,6 +24,8 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
+
+const csrfProtection = csrf();
 
 // Set up the view engine - for ejs - 3 lines below
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
@@ -42,6 +46,8 @@ app.use(
     store: store,
   }) // Also can configure a cookie.
 );
+
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
