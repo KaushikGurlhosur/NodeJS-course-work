@@ -28,6 +28,7 @@
                             
                             <form action="/cart-delete-item" method="POST" class="w-full">
                                 <input type="hidden" name="productId" value="<%= p._id %>" />
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                 <button 
                                     type="submit" 
                                     class="danger"
@@ -49,6 +50,7 @@
                     <span class="font-bold"><%= products.reduce((sum, p) => sum + p.quantity, 0) %></span>
                 </div>
               <form action="/create-order" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                   <button class="btn" type="submit">
                     Proceed to Checkout
                 </button>
