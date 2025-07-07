@@ -22,7 +22,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: req.session.user, // This will add the entire user doc but mongoose will only pick the _id. Alternatively it can be written as - req.user_id
+    userId: req.user, // This will add the entire user doc but mongoose will only pick the _id. Alternatively it can be written as - req.user_id
   });
 
   // req.user.createProduct();
