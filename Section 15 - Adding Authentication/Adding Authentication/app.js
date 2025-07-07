@@ -73,19 +73,6 @@ mongoose
     MONGODB_URI // Replace with your MongoDB connection string
   )
   .then((result) => {
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          name: "Kaushik",
-          email: "kaushikrg@gmail.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save(); // Save the user to the database
-      }
-    });
-
     app.listen(3000, () => {
       console.log("Server is running on port 3000");
     });
