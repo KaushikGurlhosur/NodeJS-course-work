@@ -35,3 +35,10 @@ exports.postLogin = (req, res, next) => {
   //   res.setHeader("Set-Cookie", "loggedIn=true; Domain=..."); // Where he cookie needs to be sent - for tracking purposes
   //   res.redirect("/");
 };
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy((err) => {
+    console.log(err);
+    res.redirect("/");
+  });
+};
