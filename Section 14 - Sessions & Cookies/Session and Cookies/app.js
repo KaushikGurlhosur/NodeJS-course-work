@@ -6,12 +6,22 @@ const mongoose = require("mongoose");
 
 const session = require("express-session");
 
+const MongoDBStore = require("connect-mongodb-session")(session);
+
 // const { engine } = require("express-handlebars"); // Import express-handlebars
 const errorController = require("./controllers/error");
 
 const User = require("./models/user"); // Import User model
 
+const MONGODB_URI =
+  "mongodb+srv://kaushikGurlhosur:depcy5-fermuw-nyGvaz@cluster0.jpqdz3m.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0";
+
 const app = express();
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "sessions",
+});
 
 // Set up the view engine - for ejs - 3 lines below
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
@@ -25,7 +35,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
-  session({ secret: "my secret", resave: false, saveUninitialized: false }) // Also can configure a cookie.
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  }) // Also can configure a cookie.
 );
 
 app.use((req, res, next) => {
@@ -52,7 +67,7 @@ app.use(errorController.get404); // 404 page
 // Now instead of the above line, we will connect to MongoDB using mongoose
 mongoose
   .connect(
-    "mongodb+srv://kaushikGurlhosur:depcy5-fermuw-nyGvaz@cluster0.jpqdz3m.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0" // Replace with your MongoDB connection string
+    MONGODB_URI // Replace with your MongoDB connection string
   )
   .then((result) => {
     User.findOne().then((user) => {
