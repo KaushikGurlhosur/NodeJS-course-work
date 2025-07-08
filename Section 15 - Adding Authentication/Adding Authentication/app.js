@@ -6,7 +6,12 @@ const mongoose = require("mongoose");
 
 const session = require("express-session");
 
-const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
+
+// const csrf = require("csurf"); // Deprecated
+
+// middleware
+const { doubleCsrf } = require("csrf-csrf");
 
 const MongoDBStore = require("connect-mongodb-session")(session);
 
@@ -25,7 +30,21 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-const csrfProtection = csrf();
+// const csrfProtection = csrf();
+
+const { doubleCsrfProtection } = doubleCsrf({
+  // Function that optionally takes the request and returns a secret.
+  getSecret: () => "seceret to generate hash value of the token",
+  getSessionIdentifier: (req) => req.sessionID,
+  // A function that returns the token from the request
+  getCsrfTokenFromRequest: (req) => {
+    return req.body._csrf;
+  },
+  cookieName: "__Kaushik-psifi.x-csrf-token",
+  cookieOptions: {
+    secure: false,
+  },
+});
 
 // Set up the view engine - for ejs - 3 lines below
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
@@ -38,6 +57,8 @@ const authRoutes = require("./routes/auth");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(cookieParser("secret for cookie signing"));
+
 app.use(
   session({
     secret: "my secret",
@@ -47,7 +68,8 @@ app.use(
   }) // Also can configure a cookie.
 );
 
-app.use(csrfProtection);
+// app.use(csrfProtection);
+app.use(doubleCsrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
