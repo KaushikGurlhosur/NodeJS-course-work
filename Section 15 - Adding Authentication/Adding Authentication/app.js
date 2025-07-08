@@ -8,6 +8,8 @@ const session = require("express-session");
 
 const cookieParser = require("cookie-parser");
 
+const flash = require("connect-flash");
+
 // const csrf = require("csurf"); // Deprecated
 
 // middleware
@@ -70,6 +72,8 @@ app.use(
 
 // app.use(csrfProtection);
 app.use(doubleCsrfProtection);
+
+app.use(flash()); // Should be initialized only after the session.
 
 app.use((req, res, next) => {
   if (!req.session.user) {
