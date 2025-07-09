@@ -5,13 +5,13 @@ const noddemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 
 const User = require("../models/user");
+const { name } = require("ejs");
 
 const transporter = noddemailer.createTransport(
   sendgridTransport({
     auth: {
       // api_key: "SEND_GRID_API_KEY",
-      api_key:
-        ".fSIm13Ugvy7ZK_E2nr7dNNUz0xbM5sm4qnXqNCuyE24",
+      api_key: ".fSIm13Ugvy7ZK_E2nr7dNNUz0xbM5sm4qnXqNCuyE24",
     },
   })
 );
@@ -143,5 +143,21 @@ exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect("/");
+  });
+};
+
+exports.getReset = (req, res, next) => {
+  let message = req.flash("error");
+
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+
+  res.render("auth/reset", {
+    path: "/reset",
+    pageTitle: "Reset Password",
+    errorMessage: message,
   });
 };
