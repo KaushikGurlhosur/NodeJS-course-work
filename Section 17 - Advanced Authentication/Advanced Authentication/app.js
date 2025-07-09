@@ -1,4 +1,5 @@
 const path = require("path");
+const dotenv = require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -22,8 +23,7 @@ const errorController = require("./controllers/error");
 
 const User = require("./models/user"); // Import User model
 
-const MONGODB_URI =
-  "mongodb+srv://kaushikGurlhosur:depcy5-fermuw-nyGvaz@cluster0.jpqdz3m.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI_API;
 
 const app = express();
 
