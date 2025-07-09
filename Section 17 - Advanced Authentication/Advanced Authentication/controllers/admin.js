@@ -75,16 +75,21 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then((product) => {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
+      }
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDescription;
       product.imageUrl = updatedImageUrl;
-      return product.save(); // This is a Mongoose method that updates the product in the database
+      return product
+        .save() // This is a Mongoose method that updates the product in the database
+        .then(() => {
+          console.log("UPDATED PRODUCT!");
+          res.redirect("/admin/products");
+        });
     })
-    .then(() => {
-      console.log("UPDATED PRODUCT!");
-      res.redirect("/admin/products");
-    })
+
     .catch((err) => {
       console.log(err);
     });
@@ -92,8 +97,9 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findByIdAndDelete(prodId) //findByIdAndDelete is a Mongoose method that deletes the product by its ID
-    .then(() => {
+  // Product.findByIdAndDelete(prodId) //findByIdAndDelete is a Mongoose method that deletes the product by its ID
+  Product.deleteOne({ _id: prodId, userId: req.user._id })
+    .then((product) => {
       console.log("DESTROYED PRODUCT");
       res.redirect("/admin/products");
     })
@@ -107,7 +113,7 @@ exports.getProducts = (req, res, next) => {
     // .select("title price -_id") // here we are getting only title and price, and adding - to _id to exclude it.
     // .populate("userId", "name") // this gives the entire user object - with name, email.
     .then((products) => {
-      console.log(products);
+      // console.log(products);
       res.render("admin/products", {
         pageTitle: "Admin Products",
         path: "/admin/products",
