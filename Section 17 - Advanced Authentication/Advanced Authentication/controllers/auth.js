@@ -9,7 +9,6 @@ const noddemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 
 const User = require("../models/user");
-const { name } = require("ejs");
 
 const transporter = noddemailer.createTransport(
   sendgridTransport({
@@ -222,9 +221,48 @@ exports.getNewPassword = (req, res, next) => {
         pageTitle: "Setting New Password",
         errorMessage: message,
         userId: user._id.toString(),
+        passwordToken: token,
       });
     })
     .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.postNewPassword = (req, res, next) => {
+  const newPassword = req.body.password;
+  const userId = req.body.userId;
+
+  const passwordToken = req.body.passwordToken;
+
+  let resetUser;
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: userId,
+  })
+    .then((user) => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then((result) => {
+      res.redirect("/login");
+      transporter.sendMail({
+        to: resetUser.email,
+        from: "kaushikgurlhosur@gmail.com",
+        subject: "Changed your password",
+        html: ` <p>Your password has been reset. You can now log in with your new password..</p>
+          `,
+      });
+    })
+    .catch((err) => {
+      req.flash("error", "Something went wrong. Please try again.");
       console.log(err);
     });
 };
