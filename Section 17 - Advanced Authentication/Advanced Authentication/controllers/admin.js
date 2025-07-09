@@ -103,7 +103,7 @@ exports.postDeleteProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .select("title price -_id") // here we are getting only title and price, and adding - to _id to exclude it.
     // .populate("userId", "name") // this gives the entire user object - with name, email.
     .then((products) => {
