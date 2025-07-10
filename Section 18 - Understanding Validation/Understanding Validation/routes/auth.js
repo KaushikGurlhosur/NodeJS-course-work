@@ -41,7 +41,14 @@ router.post(
       "Please enter a password with only numbers and text and at least 6 characters."
     )
       .isLength({ min: 6 })
-      .isAbaRouting(),
+      .isAlphanumeric(),
+
+    body("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords don't match!");
+      }
+      return true;
+    }),
   ],
   authController.postSignup
 );
