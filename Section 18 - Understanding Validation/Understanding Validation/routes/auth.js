@@ -16,7 +16,16 @@ router.get("/reset", authController.getReset);
 
 router.get("/reset/:token", authController.getNewPassword);
 
-router.post("/login", authController.postLogin);
+router.post(
+  "/login",
+  [
+    check("email").isEmail().withMessage("Please enter a valid email address."),
+    body("password", "Please enter a password at least 6 characters").isLength({
+      min: 6,
+    }),
+  ],
+  authController.postLogin
+);
 
 // VALIDATIONS LIST
 // check()
