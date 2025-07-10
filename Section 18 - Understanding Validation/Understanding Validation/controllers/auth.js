@@ -71,25 +71,27 @@ exports.postSignup = (req, res, next) => {
     });
   }
 
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        req.flash(
-          "error",
-          "This emails already exists. Please use a different email address."
-        );
-        return res.redirect("/signup");
-      }
+  // THIS IS ADDED TO EXPRESS VALIDATOR - THERE ITS CHECKING IF EMAIL ALREADY EXISTS
+  // User.findOne({ email: email })
+  //   .then((userDoc) => {
+  //     if (userDoc) {
+  //       req.flash(
+  //         "error",
+  //         "This emails already exists. Please use a different email address."
+  //       );
+  //       return res.redirect("/signup");
+  //     }
 
-      return bcrypt.hash(password, 12).then((hashedPassword) => {
-        const user = new User({
-          name: name,
-          email: email,
-          password: hashedPassword,
-          cart: { items: [] },
-        });
-        return user.save();
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        name: name,
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
       });
+      return user.save();
     })
     .then((result) => {
       res.redirect("/login");
