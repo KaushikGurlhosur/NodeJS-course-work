@@ -51,6 +51,12 @@ exports.getSignup = (req, res, next) => {
     path: "/signup",
     pageTitle: "Signup",
     errorMessage: message,
+    oldInput: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 };
 
@@ -68,6 +74,12 @@ exports.postSignup = (req, res, next) => {
       path: "/signup",
       pageTitle: "Signup",
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        name: name,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      },
     });
   }
 
