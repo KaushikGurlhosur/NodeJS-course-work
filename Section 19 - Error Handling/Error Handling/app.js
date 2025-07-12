@@ -108,6 +108,12 @@ app.get("/500", errorController.get505);
 
 app.use(errorController.get404); // 404 page
 
+// CENTRAL ERROR HANDLER FOR 500
+app.use((error, req, res, next) => {
+  // res.status(error.httpStatusCode).render(....)
+  res.redirect("/500");
+}); // Express understand that its special kinda middleware
+
 // mongoConnect(() => {
 //   app.listen(3000);
 // });
