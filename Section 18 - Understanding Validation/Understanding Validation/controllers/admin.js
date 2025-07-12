@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 
+const { validationResult } = require("express-validator");
+
 exports.getAddProduct = (req, res, next) => {
   // res.sendFile(path.join(rootDir, "views", "add-product.html"));
 
@@ -11,6 +13,9 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
+    hasError: false,
+    errorMessage: null,
+    validationErrors: [],
     // isAuthenticated: req.session.isLoggedIn, // isAuthenticated is not required in all the render methods - because we are passing it through the middleware in app.js
   });
 };
@@ -20,6 +25,25 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
   const price = req.body.price;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      hasError: true,
+      product: {
+        title: title,
+        imageUrl: imageUrl,
+        description: description,
+        price: price,
+      },
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
 
   const product = new Product({
     title: title,
@@ -59,6 +83,9 @@ exports.getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
+        hasError: false,
+        errorMessage: null,
+        validationErrors: [],
       });
     })
     .catch((err) => {
@@ -73,6 +100,26 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: false,
+      hasError: true,
+      product: {
+        title: updatedTitle,
+        imageUrl: updatedImageUrl,
+        price: updatedPrice,
+        description: updatedDescription,
+        _id: prodId,
+      },
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
+
   Product.findById(prodId)
     .then((product) => {
       if (product.userId.toString() !== req.user._id.toString()) {
@@ -82,6 +129,7 @@ exports.postEditProduct = (req, res, next) => {
       product.price = updatedPrice;
       product.description = updatedDescription;
       product.imageUrl = updatedImageUrl;
+
       return product
         .save() // This is a Mongoose method that updates the product in the database
         .then(() => {
