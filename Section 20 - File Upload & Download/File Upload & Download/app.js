@@ -59,6 +59,18 @@ const fileStorage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 // Set up the view engine - for ejs - 3 lines below
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
 app.set("views", "views"); // Set the views directory
@@ -73,6 +85,7 @@ app.use(
   multer({
     // dest: "images",
     storage: fileStorage,
+    fileFilter: fileFilter,
   }).single("image")
 ); // Now this destination creates a images folder in the project
 
