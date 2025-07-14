@@ -90,6 +90,7 @@ app.use(
 ); // Now this destination creates a images folder in the project
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(cookieParser("secret for cookie signing"));
 
