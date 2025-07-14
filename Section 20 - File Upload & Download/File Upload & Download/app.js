@@ -50,6 +50,15 @@ const { doubleCsrfProtection } = doubleCsrf({
   },
 });
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "_" + file.originalname);
+  },
+});
+
 // Set up the view engine - for ejs - 3 lines below
 app.set("view engine", "ejs"); // Set the view engine to EJS -- ejs doesn't support layouts
 app.set("views", "views"); // Set the views directory
@@ -60,7 +69,12 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false })); // Parses only the text from the form
 
-app.use(multer({ dest: "images" }).single("image")); // Now this dest creates a images folder in the project
+app.use(
+  multer({
+    // dest: "images",
+    storage: fileStorage,
+  }).single("image")
+); // Now this destination creates a images folder in the project
 
 app.use(express.static(path.join(__dirname, "public")));
 
