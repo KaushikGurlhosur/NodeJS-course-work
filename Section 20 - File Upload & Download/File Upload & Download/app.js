@@ -11,6 +11,8 @@ const cookieParser = require("cookie-parser");
 
 const flash = require("connect-flash");
 
+const multer = require("multer");
+
 // const csrf = require("csurf"); // Deprecated
 
 // middleware
@@ -57,6 +59,9 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false })); // Parses only the text from the form
+
+app.use(multer({ dest: "images" }).single("image")); // Now this dest creates a images folder in the project
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cookieParser("secret for cookie signing"));
