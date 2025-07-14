@@ -56,7 +56,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false })); // Parses only the text from the form
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cookieParser("secret for cookie signing"));
