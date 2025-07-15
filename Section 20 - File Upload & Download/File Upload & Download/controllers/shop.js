@@ -3,6 +3,7 @@ const path = require("path");
 
 const Order = require("../models/order");
 const Product = require("../models/product");
+const order = require("../models/order");
 
 exports.getProducts = (req, res, next) => {
   Product.find()
@@ -196,23 +197,37 @@ exports.getOrders = (req, res, next) => {
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
 
-  const invoiceName = "invoice-" + orderId + ".pdf";
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return next(new Error("No order found."));
+      }
 
-  const invoicePath = path.join("data", "invoices", invoiceName);
+      if (order.user._id.toString() !== req.user._id.toString()) {
+        return next(new Error("Unauthorized access"));
+      }
 
-  fs.readFile(invoicePath, (err, data) => {
-    if (err) {
-      return next(err);
-    }
-    res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
-    res.setHeader(
-      "Content-Disposition",
-      "inline; filename=" + invoiceName + '"'
-    ); // This will display the PDF in the browser instead of downloading it
-    // res.setHeader(
-    //   "Content-Disposition",
-    //   "attachment; filename=" + invoiceName + '"'
-    // ); // This will prompt the user to download the file with the given name
-    res.send(data);
-  });
+      const invoiceName = "invoice-" + orderId + ".pdf";
+
+      const invoicePath = path.join("data", "invoices", invoiceName);
+
+      fs.readFile(invoicePath, (err, data) => {
+        if (err) {
+          return next(err);
+        }
+        res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+        res.setHeader(
+          "Content-Disposition",
+          "inline; filename=" + invoiceName + '"'
+        ); // This will display the PDF in the browser instead of downloading it
+        // res.setHeader(
+        //   "Content-Disposition",
+        //   "attachment; filename=" + invoiceName + '"'
+        // ); // This will prompt the user to download the file with the given name
+        res.send(data);
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
