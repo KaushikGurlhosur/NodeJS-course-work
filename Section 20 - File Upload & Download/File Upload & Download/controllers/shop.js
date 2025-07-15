@@ -204,6 +204,15 @@ exports.getInvoice = (req, res, next) => {
     if (err) {
       return next(err);
     }
+    res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+    res.setHeader(
+      "Content-Disposition",
+      "inline; filename=" + invoiceName + '"'
+    ); // This will display the PDF in the browser instead of downloading it
+    // res.setHeader(
+    //   "Content-Disposition",
+    //   "attachment; filename=" + invoiceName + '"'
+    // ); // This will prompt the user to download the file with the given name
     res.send(data);
   });
 };
