@@ -211,21 +211,30 @@ exports.getInvoice = (req, res, next) => {
 
       const invoicePath = path.join("data", "invoices", invoiceName);
 
-      fs.readFile(invoicePath, (err, data) => {
-        if (err) {
-          return next(err);
-        }
-        res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
-        res.setHeader(
-          "Content-Disposition",
-          "inline; filename=" + invoiceName + '"'
-        ); // This will display the PDF in the browser instead of downloading it
-        // res.setHeader(
-        //   "Content-Disposition",
-        //   "attachment; filename=" + invoiceName + '"'
-        // ); // This will prompt the user to download the file with the given name
-        res.send(data);
-      });
+      // fs.readFile(invoicePath, (err, data) => {
+      //   if (err) {
+      //     return next(err);
+      //   }
+      // res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+      // res.setHeader(
+      //   "Content-Disposition",
+      //   "inline; filename=" + invoiceName + '"'
+      // ); // This will display the PDF in the browser instead of downloading it
+      //   // res.setHeader(
+      //   //   "Content-Disposition",
+      //   //   "attachment; filename=" + invoiceName + '"'
+      //   // ); // This will prompt the user to download the file with the given name
+      //   res.send(data);
+      // });
+
+      const file = fs.createReadStream(invoicePath);
+      res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+      res.setHeader(
+        "Content-Disposition",
+        "inline; filename=" + invoiceName + '"'
+      ); // This will display the PDF in the browser instead of downloading it
+
+      file.pipe(res); // Pipe the file stream to the response
     })
     .catch((err) => {
       next(err);
