@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const PDFDocument = require("pdfkit");
+
 const Order = require("../models/order");
 const Product = require("../models/product");
 const order = require("../models/order");
@@ -211,6 +213,21 @@ exports.getInvoice = (req, res, next) => {
 
       const invoicePath = path.join("data", "invoices", invoiceName);
 
+      const pdfDoc = new PDFDocument();
+
+      res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+      res.setHeader(
+        "Content-Disposition",
+        "inline; filename=" + invoiceName + '"'
+      ); // This will display the PDF in the browser instead of downloading it
+
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res); // Pipe the PDF document to the response
+
+      pdfDoc.text("Hello world");
+
+      pdfDoc.end();
+
       // fs.readFile(invoicePath, (err, data) => {
       //   if (err) {
       //     return next(err);
@@ -227,14 +244,14 @@ exports.getInvoice = (req, res, next) => {
       //   res.send(data);
       // });
 
-      const file = fs.createReadStream(invoicePath);
-      res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
-      res.setHeader(
-        "Content-Disposition",
-        "inline; filename=" + invoiceName + '"'
-      ); // This will display the PDF in the browser instead of downloading it
+      // const file = fs.createReadStream(invoicePath);
+      // res.setHeader("Content-Type", "application/pdf"); // Set the content type to PDF and it opens in the browser instead of downloading
+      // res.setHeader(
+      //   "Content-Disposition",
+      //   "inline; filename=" + invoiceName + '"'
+      // ); // This will display the PDF in the browser instead of downloading it
 
-      file.pipe(res); // Pipe the file stream to the response
+      // file.pipe(res); // Pipe the file stream to the response
     })
     .catch((err) => {
       next(err);
