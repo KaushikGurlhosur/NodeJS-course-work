@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 
+const fileHelper = require("../util/file");
+
 const { validationResult } = require("express-validator");
 
 exports.getAddProduct = (req, res, next) => {
@@ -177,7 +179,9 @@ exports.postEditProduct = (req, res, next) => {
       product.description = updatedDescription;
 
       if (image) {
-        product.imageUrl = image.path;
+        // if there is an image, then delete the old image
+        fileHelper.deleteFile(product.imageUrl); // delete the old image file
+        product.imageUrl = image.path; // update the imageUrl with the new image path
       }
 
       return product
@@ -200,7 +204,15 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   // Product.findByIdAndDelete(prodId) //findByIdAndDelete is a Mongoose method that deletes the product by its ID
-  Product.deleteOne({ _id: prodId, userId: req.user._id })
+
+  Product.findById(prodId)
+    .then((product) => {
+      if (!product) {
+        return next(new Error("Product not found."));
+      }
+      fileHelper.deleteFile(product.imageUrl); // delete the image file associated with the product
+      return Product.deleteOne({ _id: prodId, userId: req.user._id });
+    })
     .then((product) => {
       console.log("DESTROYED PRODUCT");
       res.redirect("/admin/products");
