@@ -16,14 +16,14 @@
                     
                    
                     <li class="orders__items">
-                        <h1> Order : # <%= order._id %></h1>
+                        <h1> Order : # <%= order._id %> - <a href="/orders/<%= order._id %>">Invoice</a></h1>
                         <ul class="orders__products">
                             <% order.products.forEach(product => { 
                                   total += product.product.price * product.quantity;
                                 %>
                                
                                 <li class="orders__products-item">
-                                    <%= product.product.title %> (<%= product.quantity %>) - <a href="/orders/<%= order._id %>">Invoice</a>
+                                    <%= product.product.title %> (<%= product.quantity %>)
                                 </li>
 
                               
