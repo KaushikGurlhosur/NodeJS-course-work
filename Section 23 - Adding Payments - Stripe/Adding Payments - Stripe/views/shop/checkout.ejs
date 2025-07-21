@@ -1,13 +1,52 @@
 <%- include("../includes/head.ejs") %>
-<link rel="stylesheet" href="/css/forms.css" />
-<link rel="stylesheet" href="/css/product.css" />
 </head>
-<body>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
     <%- include("../includes/navigation.ejs") %>
-    <main>
-        <h1>Checkout Page</h1>
-    </main>
-    <%- include("../includes/end.ejs") %>
 
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <% products.forEach(p => { %>
+                    <div class="bg-gray-800 rounded-xl shadow-lg p-4 flex flex-col items-center hover:shadow-yellow-400/20 transition-all duration-300 border border-gray-700">
+                        <!-- Improved image container with fixed aspect ratio -->
+                        <!-- <div class="w-full h-40 mb-4 overflow-hidden rounded-lg flex items-center justify-center">
+                            <img 
+                                src="<%= p.imageUrl %>" 
+                                alt="<%= p.title %>" 
+                                class="h-full w-auto object-contain max-w-full"
+                                loading="lazy"
+                            >
+                        </div> -->
+                        
+                        <div class="w-full text-center">
+                            <h3 class="text-lg font-semibold mb-1 truncate w-full"><%= p.productId.title %></h3>
+                            <p class="text-gray-400 mb-3">
+                                Quantity: <span class="font-bold text-yellow-400"><%= p.quantity || 0 %></span>
+                            </p>
+                            
+                           
+                        </div>
+                    </div>
+                    <% }) %>
+                    <div>
+                        <h2>Total: <%= totalSum %></h2>
+                    </div>
+            </div>
+
+            <div>
+                <button id="order-btn">ORDER</button>
+                <script src="https://js.stripe.com/basil/stripe.js"></script>
+                <script>
+                    var stripe = Stripe("<%= stripePublicKey %>");
+                    var orderBtn = document.getElementById("order-btn");
+                    orderBtn.addEventListener("click", function() {
+                        stripe.redirectToCheckout({
+                            sessionId: "<%= sessionId %>"
+                        })
+                    })
+                </script>
+            </div>
+    </main>
+
+    <%- include("../includes/end.ejs") %>
 </body>
 </html>

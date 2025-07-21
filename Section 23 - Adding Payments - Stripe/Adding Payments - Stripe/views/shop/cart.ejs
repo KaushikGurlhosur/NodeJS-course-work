@@ -37,6 +37,8 @@
                                     <span>❌</span>
                                 </button>
                             </form>
+
+                          
                         </div>
                     </div>
                 <% }) %>
@@ -49,12 +51,13 @@
                     <span class="text-gray-400">Total Items:</span>
                     <span class="font-bold"><%= products.reduce((sum, p) => sum + p.quantity, 0) %></span>
                 </div>
-              <form action="/create-order" method="POST">
+              <!-- <form action="/create-order" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                   <button class="btn" type="submit">
                     Proceed to Checkout
                 </button>
-              </form>
+              </form> -->
+                <a href="/checkout" class="btn">Order now</a>
             </div>
             
         <% } else { %>
