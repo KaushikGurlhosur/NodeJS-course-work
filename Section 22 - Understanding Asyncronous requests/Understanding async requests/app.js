@@ -42,7 +42,7 @@ const { doubleCsrfProtection } = doubleCsrf({
   getSessionIdentifier: (req) => req.sessionID,
   // A function that returns the token from the request
   getCsrfTokenFromRequest: (req) => {
-    return req.body._csrf;
+    return req.body._csrf || req.headers["psifi.x-csrf-token"];
   },
   cookieName: "__Kaushik-psifi.x-csrf-token",
   cookieOptions: {
