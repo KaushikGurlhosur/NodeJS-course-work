@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>Data</form>
+app.use(bodyParser.json()); // application/json
 
 // /feed/posts
 app.use("/feed", feedRoutes);
