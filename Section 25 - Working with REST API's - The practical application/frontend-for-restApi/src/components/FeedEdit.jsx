@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect, Fragment } from "react";
 import Backdrop from "./Backdrop";
 import Modal from "./Modal";
@@ -73,34 +72,35 @@ const FeedEdit = (props) => {
 
     setPostForm((prevState) => {
       let isValid = true;
-      for (const validator of prevState.postForm[input].validators) {
+      for (const validator of prevState[input].validators) {
+        // Changed from prevState.postForm
         isValid = isValid && validator(value);
       }
 
       const updatedForm = {
-        ...prevState.postForm,
+        ...prevState, // Changed from ...prevState.postForm
         [input]: {
-          ...prevState.postForm[input],
+          ...prevState[input], // Changed from ...prevState.postForm[input]
           valid: isValid,
           value: files ? files[0] : value,
         },
       };
 
-      let updatedFormIsValid = true;
+      let formIsValid = true;
       for (const inputName in updatedForm) {
-        updatedFormIsValid = updatedFormIsValid && updatedForm[inputName].valid;
+        formIsValid = formIsValid && updatedForm[inputName].valid;
       }
 
-      setFormIsValid(updatedFormIsValid);
+      setFormIsValid(formIsValid);
       return updatedForm;
     });
   };
 
   const inputBlurHandler = (input) => {
     setPostForm((prevState) => ({
-      ...prevState.postForm,
+      ...prevState,
       [input]: {
-        ...prevState.postForm[input],
+        ...prevState[input],
         touched: true,
       },
     }));
@@ -129,16 +129,16 @@ const FeedEdit = (props) => {
     <Fragment>
       <Backdrop onClick={cancelPostChangeHandler} />
       <Modal
-        title="New Post"
+        title={props.selectedPost ? "Edit Post" : "New Post"}
         acceptEnabled={formIsValid}
         onCancelModal={cancelPostChangeHandler}
         onAcceptModal={acceptPostChangeHandler}
-        isLoading={props.loading}
-      >
+        isLoading={props.loading}>
         <form>
           <Input
             id="title"
             label="Title"
+            name="title"
             control="input"
             onChange={postInputChangeHandler}
             onBlur={() => inputBlurHandler("title")}
@@ -149,6 +149,7 @@ const FeedEdit = (props) => {
           <FilePicker
             id="image"
             label="Image"
+            name="image"
             control="input"
             onChange={postInputChangeHandler}
             onBlur={() => inputBlurHandler("image")}
@@ -162,6 +163,7 @@ const FeedEdit = (props) => {
           <Input
             id="content"
             label="Content"
+            name="content"
             control="textarea"
             rows="5"
             onChange={postInputChangeHandler}

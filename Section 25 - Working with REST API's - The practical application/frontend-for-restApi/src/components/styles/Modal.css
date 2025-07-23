@@ -1,4 +1,4 @@
-.modal {
+/* .modal {
   position: fixed;
   width: 90%;
   left: 5%;
@@ -7,6 +7,20 @@
   border-radius: 5px;
   z-index: 200;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+} */
+
+.modal {
+  position: fixed;
+  width: 90%;
+  left: 5%;
+  top: 20vh;
+  background: white;
+  border-radius: 5px;
+  z-index: 1001; /* Increased from 200 to be above backdrop */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: block; /* Ensure it's always visible when rendered */
+  opacity: 1; /* Explicitly set opacity */
+  visibility: visible; /* Explicitly set visibility */
 }
 
 .modal__header {
