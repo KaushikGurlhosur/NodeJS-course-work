@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import "./NavigationItems.css";
+import "./styles/NavigationItems.css";
 
 const navItems = [
   { id: "feed", text: "Feed", link: "/", auth: true },
@@ -15,8 +15,10 @@ const navigationItems = (props) => [
     .map((item) => (
       <li
         key={item.id}
-        className={["navigation-item", props.mobile ? "mobile" : ""].join(" ")}>
-        <NavLink to={item.link} onClick={props.onChoose}>
+        className={["navigation-item", props.mobile ? "mobile" : ""].join(" ")}
+      >
+        {/* Update the NavLink here */}
+        <NavLink to={item.link} exact="true" onClick={props.onChoose}>
           {item.text}
         </NavLink>
       </li>
