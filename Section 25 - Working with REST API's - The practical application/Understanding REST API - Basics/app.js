@@ -1,5 +1,7 @@
 const express = require("express");
 
+const path = require("path");
+
 const mongoose = require("mongoose");
 
 const dotenv = require("dotenv").config();
@@ -14,6 +16,8 @@ const app = express();
 
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>Data</form>
 app.use(bodyParser.json()); // application/json
+
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Enable CORS for all routes
 // app.use((req, res, next) => {
@@ -31,6 +35,14 @@ app.use(cors()); // Enable CORS for all routes
 
 // /feed/posts
 app.use("/feed", feedRoutes);
+
+// Error handling middleware
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  res.status(status).json({ message: message });
+});
 
 mongoose
   .connect(process.env.MONGODB_URL)
