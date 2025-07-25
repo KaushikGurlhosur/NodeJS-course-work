@@ -106,6 +106,12 @@ const Feed = () => {
   const finishEditHandler = (postData) => {
     setEditLoading(true);
     // Set up data (with image!)
+
+    const formData = new FormData();
+    formData.append("title", postData.title);
+    formData.append("content", postData.content);
+    formData.append("image", postData.image);
+
     let url = "http://localhost:8080/feed/post";
     let method = "POST";
 
@@ -115,13 +121,10 @@ const Feed = () => {
 
     fetch(url, {
       method: method,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content,
-      }),
+      // headers: { // The formData object automatically sets the correct headers so its not needed.
+      //   "content-type": "application/json",
+      // },
+      body: formData, // Use formData to send the image file
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {

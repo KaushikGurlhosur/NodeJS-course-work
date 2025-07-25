@@ -30,6 +30,13 @@ exports.createPost = (req, res, next) => {
     //   errors: errors.array(),
     // });
   }
+  if (!req.file) {
+    const error = new Error("NO image provided.");
+    error.statusCode = 422; // Unprocessable Entity
+    throw error;
+  }
+
+  const imageUrl = req.file.path;
 
   const { title, content } = req.body;
   // console.log(title, content);
@@ -38,7 +45,7 @@ exports.createPost = (req, res, next) => {
   const post = new Post({
     title: title,
     content: content,
-    imageUrl: "images/kaushik.png", // Placeholder image URL
+    imageUrl: imageUrl,
     creator: {
       name: "Kaushik Gurlhosur",
     },
