@@ -28,4 +28,6 @@ router.put(
   feedController.updatePost
 );
 
+router.delete("/post/:postId", feedController.deletePost); // For delete you cant send data in the body
+
 module.exports = router;
