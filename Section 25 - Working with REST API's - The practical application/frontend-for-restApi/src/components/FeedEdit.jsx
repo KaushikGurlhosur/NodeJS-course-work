@@ -55,13 +55,7 @@ const FeedEdit = (props) => {
       setPostForm(updatedPostForm);
       setFormIsValid(true);
     }
-  }, [
-    postForm.content,
-    postForm.image,
-    postForm.title,
-    props.editing,
-    props.selectedPost,
-  ]);
+  }, [props.editing, props.selectedPost]);
 
   const postInputChangeHandler = (input, value, files) => {
     if (files) {
