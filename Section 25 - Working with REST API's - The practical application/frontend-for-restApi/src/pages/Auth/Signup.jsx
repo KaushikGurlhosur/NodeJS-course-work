@@ -1,33 +1,34 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react";
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import { required, length, email } from '../../util/validators';
-import Auth from './Auth';
+import Input from "../../components/Input";
+import Button from "../../components/Button";
+import { required, length, email } from "../../util/validators";
+import Auth from "./Auth";
 
 const Signup = (props) => {
   const [signupForm, setSignupForm] = useState({
     email: {
-      value: '',
+      value: "",
       valid: false,
       touched: false,
       validators: [required, email],
     },
     password: {
-      value: '',
+      value: "",
       valid: false,
       touched: false,
       validators: [required, length({ min: 5 })],
     },
     name: {
-      value: '',
+      value: "",
       valid: false,
       touched: false,
       validators: [required],
     },
-    formIsValid: false,
   });
+
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const inputChangeHandler = useCallback((input, value) => {
     setSignupForm((prevSignupForm) => {
@@ -45,70 +46,85 @@ const Signup = (props) => {
         },
       };
 
-      let formIsValid = true;
-      for (const inputName in updatedForm) {
-        formIsValid = formIsValid && updatedForm[inputName].valid;
-      }
+      // Calculate form validity
+      const isFormValid = Object.keys(updatedForm).every(
+        (key) => key === "formIsValid" || updatedForm[key].valid
+      );
 
-      return {
-        ...updatedForm,
-        formIsValid: formIsValid,
-      };
+      setFormIsValid(isFormValid);
+
+      return updatedForm;
     });
   }, []);
 
-  const inputBlurHandler = useCallback(
-    (input) => {
-      setSignupForm((prevSignupForm) => {
-        return {
-          ...prevSignupForm,
-          [input]: {
-            ...prevSignupForm[input],
-            touched: true,
-          },
-        };
+  const inputBlurHandler = useCallback((input) => {
+    setSignupForm((prevSignupForm) => ({
+      ...prevSignupForm,
+      [input]: {
+        ...prevSignupForm[input],
+        touched: true,
+      },
+    }));
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formIsValid) {
+      props.onSignup(e, {
+        email: signupForm.email.value,
+        password: signupForm.password.value,
+        name: signupForm.name.value,
       });
-    },
-    []
-  );
+    }
+  };
 
   return (
     <Auth>
-      <form onSubmit={(e) => props.onSignup(e, signupForm)}>
+      <form onSubmit={handleSubmit}>
         <Input
           id="email"
           label="Your E-Mail"
           type="email"
           control="input"
-          onChange={(value) => inputChangeHandler('email', value)}
-          onBlur={() => inputBlurHandler('email')}
+          onChange={(value) => inputChangeHandler("email", value)}
+          onBlur={() => inputBlurHandler("email")}
           value={signupForm.email.value}
           valid={signupForm.email.valid}
           touched={signupForm.email.touched}
+          required
+          autoComplete="username"
         />
         <Input
           id="name"
           label="Your Name"
           type="text"
           control="input"
-          onChange={(value) => inputChangeHandler('name', value)}
-          onBlur={() => inputBlurHandler('name')}
+          onChange={(value) => inputChangeHandler("name", value)}
+          onBlur={() => inputBlurHandler("name")}
           value={signupForm.name.value}
           valid={signupForm.name.valid}
           touched={signupForm.name.touched}
+          required
+          autoComplete="name"
         />
         <Input
           id="password"
           label="Password"
           type="password"
           control="input"
-          onChange={(value) => inputChangeHandler('password', value)}
-          onBlur={() => inputBlurHandler('password')}
+          onChange={(value) => inputChangeHandler("password", value)}
+          onBlur={() => inputBlurHandler("password")}
           value={signupForm.password.value}
           valid={signupForm.password.valid}
           touched={signupForm.password.touched}
+          required
+          autoComplete="new-password"
         />
-        <Button design="raised" type="submit" loading={props.loading}>
+        <Button
+          design="raised"
+          type="submit"
+          loading={props.loading}
+          disabled={!formIsValid}>
           Signup
         </Button>
       </form>

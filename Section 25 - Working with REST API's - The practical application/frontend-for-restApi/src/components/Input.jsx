@@ -13,13 +13,10 @@ const input = (props) => (
         ].join(" ")}
         type={props.type}
         id={props.id}
-        required={props.required}
-        value={props.value}
-        placeholder={props.placeholder}
-        onChange={(e) =>
-          props.onChange(props.id, e.target.value, e.target.files)
-        }
+        value={props.value || ""}
+        onChange={(e) => props.onChange(e.target.value)}
         onBlur={props.onBlur}
+        placeholder={props.placeholder}
       />
     )}
     {props.control === "textarea" && (
