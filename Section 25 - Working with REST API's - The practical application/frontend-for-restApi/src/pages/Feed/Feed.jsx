@@ -99,7 +99,7 @@ const Feed = (props) => {
   };
 
   const newPostHandler = () => {
-    console.log("New Post clicked - isEditing should become true");
+    // console.log("New Post clicked - isEditing should become true");
     setIsEditing(true);
   };
 
