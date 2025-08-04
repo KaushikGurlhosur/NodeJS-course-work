@@ -60,7 +60,14 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 //   next();
 // });
 
-app.use(cors()); // Enable CORS for all routes
+app.use(
+  cors({
+    // origin: "http://localhost:5173", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // 👈 Required for Authorization headers
+  })
+); // Enable CORS for all routes
 
 // /feed/posts
 app.use("/feed", feedRoutes);

@@ -13,7 +13,6 @@ import SinglePostPage from "./pages/Feed/SinglePost/SinglePost";
 import LoginPage from "./pages/auth/Login";
 import SignupPage from "./pages/auth/Signup";
 import "./App.css";
-import { email } from "./util/validators";
 
 function App() {
   const [showBackdrop, setShowBackdrop] = useState(false);

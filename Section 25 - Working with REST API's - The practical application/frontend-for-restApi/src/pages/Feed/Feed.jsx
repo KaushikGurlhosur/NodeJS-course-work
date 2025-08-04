@@ -9,7 +9,7 @@ import Loader from "../../components/Loader";
 import ErrorHandler from "../../components/ErrorHandler";
 import "./Feed.css";
 
-const Feed = () => {
+const Feed = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [posts, setPosts] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -57,7 +57,11 @@ const Feed = () => {
       setPostPage(page);
     }
 
-    fetch("http://localhost:8080/feed/posts?page=" + page)
+    fetch("http://localhost:8080/feed/posts?page=" + page, {
+      headers: {
+        Authorization: "Bearer " + props.token,
+      },
+    })
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch posts.");
