@@ -13,6 +13,7 @@ import SinglePostPage from "./pages/Feed/SinglePost/SinglePost";
 import LoginPage from "./pages/auth/Login";
 import SignupPage from "./pages/auth/Signup";
 import "./App.css";
+import { email } from "./util/validators";
 
 function App() {
   const [showBackdrop, setShowBackdrop] = useState(false);
@@ -82,7 +83,16 @@ function App() {
     event.preventDefault();
     setAuthLoading(true);
 
-    fetch("URL")
+    fetch("http://localhost:8080/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: authData.email,
+        password: authData.password,
+      }),
+    })
       .then(function (res) {
         if (res.status === 422) {
           throw new Error("Validation failed.");
