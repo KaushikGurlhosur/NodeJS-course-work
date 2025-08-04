@@ -137,6 +137,9 @@ const Feed = (props) => {
       //   "content-type": "application/json",
       // },
       body: formData, // Use formData to send the image file
+      headers: {
+        Authorization: "Bearer " + props.token,
+      },
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
@@ -190,6 +193,9 @@ const Feed = (props) => {
     setPostsLoading(true);
     fetch("http://localhost:8080/feed/post/" + postId, {
       method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + props.token,
+      },
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Image from "../../../components/Image";
 import "./SinglePost.css";
 
-const SinglePost = () => {
+const SinglePost = (props) => {
   const [post, setPost] = useState({
     title: "",
     author: "",
@@ -19,7 +19,12 @@ const SinglePost = () => {
     const fetchPost = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/feed/post/${postId}`
+          `http://localhost:8080/feed/post/${postId}`,
+          {
+            headers: {
+              Authorization: "Bearer " + props.token,
+            },
+          }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch status");
@@ -38,7 +43,7 @@ const SinglePost = () => {
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId, props.token]);
 
   return (
     <section className="single-post">
