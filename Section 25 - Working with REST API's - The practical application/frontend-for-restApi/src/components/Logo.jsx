@@ -1,7 +1,14 @@
-import React from "react";
+// import React from "react";
 
+// import "./styles/Logo.css";
+
+// const logo = (props) => <h1 className="logo">MessageNode</h1>;
+
+// export default logo;
+
+import React from "react";
 import "./styles/Logo.css";
 
-const logo = (props) => <h1 className="logo">MessageNode</h1>;
+const Logo = () => <h1 className="logo">MessageNode</h1>;
 
-export default logo;
+export default Logo;

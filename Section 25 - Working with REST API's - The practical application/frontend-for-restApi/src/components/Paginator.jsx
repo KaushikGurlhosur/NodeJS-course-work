@@ -1,18 +1,40 @@
-import React from "react";
+// import React from "react";
 
+// import "./styles/Paginator.css";
+
+// const paginator = (props) => (
+//   <div className="paginator">
+//     {props.children}
+//     <div className="paginator__controls">
+//       {props.currentPage > 1 && (
+//         <button className="paginator__control" onClick={props.onPrevious}>
+//           Previous
+//         </button>
+//       )}
+//       {props.currentPage < props.lastPage && (
+//         <button className="paginator__control" onClick={props.onNext}>
+//           Next
+//         </button>
+//       )}
+//     </div>
+//   </div>
+// );
+
+// export default paginator;
+import React from "react";
 import "./styles/Paginator.css";
 
-const paginator = (props) => (
+const Paginator = ({ children, currentPage, lastPage, onPrevious, onNext }) => (
   <div className="paginator">
-    {props.children}
+    {children}
     <div className="paginator__controls">
-      {props.currentPage > 1 && (
-        <button className="paginator__control" onClick={props.onPrevious}>
+      {currentPage > 1 && (
+        <button className="paginator__control" onClick={onPrevious}>
           Previous
         </button>
       )}
-      {props.currentPage < props.lastPage && (
-        <button className="paginator__control" onClick={props.onNext}>
+      {currentPage < lastPage && (
+        <button className="paginator__control" onClick={onNext}>
           Next
         </button>
       )}
@@ -20,4 +42,4 @@ const paginator = (props) => (
   </div>
 );
 
-export default paginator;
+export default Paginator;
