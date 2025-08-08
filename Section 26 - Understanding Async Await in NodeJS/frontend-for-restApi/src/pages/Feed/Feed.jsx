@@ -311,7 +311,7 @@ const Feed = ({ userId, token }) => {
   useEffect(() => {
     const fetchUserStatus = async () => {
       try {
-        const response = await fetch("URL", {
+        const response = await fetch("http://localhost:8080/auth/status", {
           headers: { Authorization: "Bearer " + token },
         });
         if (!response.ok) throw new Error("Failed to fetch user status.");
@@ -358,16 +358,16 @@ const Feed = ({ userId, token }) => {
   const statusUpdateHandler = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/status", {
+      const response = await fetch("http://localhost:8080/auth/status", {
         method: "PATCH",
         headers: {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status: status }),
       });
       if (!response.ok) throw new Error("Can't update status!");
-      await response.json();
+      return response.json();
     } catch (err) {
       catchError(err);
     }
