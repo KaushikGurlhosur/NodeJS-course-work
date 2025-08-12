@@ -288,6 +288,9 @@
 
 // export default Feed;
 import React, { useState, useEffect, Fragment } from "react";
+
+import openSocket from "socket.io-client";
+
 import Post from "../../components/Post";
 import Button from "../../components/Button";
 import FeedEdit from "../../components/FeedEdit";
@@ -324,6 +327,7 @@ const Feed = ({ userId, token }) => {
 
     fetchUserStatus();
     loadPosts();
+    openSocket("http://localhost:8080");
   }, [token]);
 
   const loadPosts = async (direction) => {
