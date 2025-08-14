@@ -331,6 +331,8 @@ const Feed = ({ userId, token }) => {
     socket.on("posts", (data) => {
       if (data.action === "create") {
         addPost(data.post);
+      } else if (data.action === "update") {
+        updatePost(data.post);
       }
     });
   }, [token]);
@@ -347,6 +349,18 @@ const Feed = ({ userId, token }) => {
       return updatedPosts;
     });
     setTotalPosts((prevTotal) => prevTotal + 1);
+  };
+
+  const updatePost = (post) => {
+    setPosts((prevPosts) => {
+      const postIndex = prevPosts.findIndex((p) => p._id === post._id);
+      if (postIndex > -1) {
+        const updatedPosts = [...prevPosts];
+        updatedPosts[postIndex] = post;
+        return updatedPosts;
+      }
+      return prevPosts;
+    });
   };
 
   const loadPosts = async (direction) => {
