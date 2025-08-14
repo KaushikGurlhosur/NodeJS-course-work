@@ -333,6 +333,8 @@ const Feed = ({ userId, token }) => {
         addPost(data.post);
       } else if (data.action === "update") {
         updatePost(data.post);
+      } else if (data.action === "delete") {
+        loadPosts();
       }
     });
   }, [token]);
@@ -500,12 +502,13 @@ const Feed = ({ userId, token }) => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Deleting a post failed!");
         }
+        loadPosts();
         return res.json();
       })
-      .then(() => {
-        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
-        setPostsLoading(false);
-      })
+      // .then(() => {
+      //   setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
+      //   setPostsLoading(false);
+      // })
       .catch((err) => {
         console.error(err);
         setPostsLoading(false);
