@@ -327,8 +327,27 @@ const Feed = ({ userId, token }) => {
 
     fetchUserStatus();
     loadPosts();
-    openSocket("http://localhost:8080");
+    const socket = openSocket("http://localhost:8080");
+    socket.on("posts", (data) => {
+      if (data.action === "create") {
+        addPost(data.post);
+      }
+    });
   }, [token]);
+
+  const addPost = (post) => {
+    setPosts((prevPosts) => {
+      const updatedPosts = [...prevPosts];
+      if (postPage === 1) {
+        if (updatedPosts.length >= 2) {
+          updatedPosts.pop();
+        }
+        updatedPosts.unshift(post);
+      }
+      return updatedPosts;
+    });
+    setTotalPosts((prevTotal) => prevTotal + 1);
+  };
 
   const loadPosts = async (direction) => {
     setPostsLoading(true);
