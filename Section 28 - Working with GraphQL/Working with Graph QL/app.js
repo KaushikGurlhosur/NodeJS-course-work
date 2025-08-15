@@ -12,6 +12,10 @@ const multer = require("multer");
 
 const bodyParser = require("body-parser");
 
+const { createHandler } = require("graphql-http/lib/use/express");
+const graphqlSchema = require("./graphql/schema");
+const graphqlResolver = require("./graphql/resolvers");
+
 const app = express();
 
 const fileStorage = multer.diskStorage({
@@ -64,6 +68,14 @@ app.use(
     credentials: true, // 👈 Required for Authorization headers
   })
 ); // Enable CORS for all routes
+
+app.all(
+  "/graphql",
+  createHandler({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+  })
+);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
