@@ -289,8 +289,6 @@
 // export default Feed;
 import React, { useState, useEffect, Fragment } from "react";
 
-import openSocket from "socket.io-client";
-
 import Post from "../../components/Post";
 import Button from "../../components/Button";
 import FeedEdit from "../../components/FeedEdit";
@@ -327,43 +325,7 @@ const Feed = ({ userId, token }) => {
 
     fetchUserStatus();
     loadPosts();
-    const socket = openSocket("http://localhost:8080");
-    socket.on("posts", (data) => {
-      if (data.action === "create") {
-        addPost(data.post);
-      } else if (data.action === "update") {
-        updatePost(data.post);
-      } else if (data.action === "delete") {
-        loadPosts();
-      }
-    });
   }, [token]);
-
-  const addPost = (post) => {
-    setPosts((prevPosts) => {
-      const updatedPosts = [...prevPosts];
-      if (postPage === 1) {
-        if (updatedPosts.length >= 2) {
-          updatedPosts.pop();
-        }
-        updatedPosts.unshift(post);
-      }
-      return updatedPosts;
-    });
-    setTotalPosts((prevTotal) => prevTotal + 1);
-  };
-
-  const updatePost = (post) => {
-    setPosts((prevPosts) => {
-      const postIndex = prevPosts.findIndex((p) => p._id === post._id);
-      if (postIndex > -1) {
-        const updatedPosts = [...prevPosts];
-        updatedPosts[postIndex] = post;
-        return updatedPosts;
-      }
-      return prevPosts;
-    });
-  };
 
   const loadPosts = async (direction) => {
     setPostsLoading(true);
