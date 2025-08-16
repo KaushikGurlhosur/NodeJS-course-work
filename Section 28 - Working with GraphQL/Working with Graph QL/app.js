@@ -15,6 +15,7 @@ const bodyParser = require("body-parser");
 const { createHandler } = require("graphql-http/lib/use/express");
 const graphqlSchema = require("./graphql/schema");
 const graphqlResolver = require("./graphql/resolvers");
+const { ruruHTML } = require("ruru/server"); // For graphiql UI
 
 const app = express();
 
@@ -74,8 +75,15 @@ app.all(
   createHandler({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
+    graphiql: true,
   })
 );
+
+// Optional graphiql UI
+app.get("/", (_req, res) => {
+  res.type("html");
+  res.end(ruruHTML({ endpoint: "/graphql" }));
+});
 
 // Error handling middleware
 app.use((error, req, res, next) => {
