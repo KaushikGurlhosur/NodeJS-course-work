@@ -76,6 +76,7 @@ app.all(
     schema: graphqlSchema,
     rootValue: graphqlResolver,
     graphiql: true,
+
     formatError: (err) => {
       if (!err.originalError) {
         return err;
