@@ -16,6 +16,7 @@ const { createHandler } = require("graphql-http/lib/use/express");
 const graphqlSchema = require("./graphql/schema");
 const graphqlResolver = require("./graphql/resolvers");
 const { ruruHTML } = require("ruru/server"); // For graphiql UI
+const auth = require("./middleware/auth");
 
 const app = express();
 
@@ -69,6 +70,8 @@ app.use(
     credentials: true, // 👈 Required for Authorization headers
   })
 ); // Enable CORS for all routes
+
+app.use(auth);
 
 app.all(
   "/graphql",
