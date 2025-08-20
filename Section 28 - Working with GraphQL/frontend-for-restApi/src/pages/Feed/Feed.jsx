@@ -396,35 +396,61 @@ const Feed = ({ userId, token }) => {
     formData.append("content", postData.content);
     formData.append("image", postData.image);
 
-    let url = "http://localhost:8080/feed/post";
-    let method = "POST";
+    const graphqlQuery = {
+      query: `
+    mutation CreatePost($title: String!, $content: String!, $imageUrl: String!) {
+      createPost(postInput: {
+        title: $title,
+        content: $content,
+        imageUrl: $imageUrl
+      }) {
+        _id
+        title
+        content
+        imageUrl
+        creator {
 
-    if (editPost) {
-      url = `http://localhost:8080/feed/post/${editPost._id}`;
-      method = "PUT";
+          email
+          name
+        }
+        createdAt
+        updatedAt
+      }
     }
+  `,
+      variables: {
+        title: postData.title,
+        content: postData.content,
+        imageUrl: "placeholder.jpg",
+      },
+    };
 
-    fetch(url, {
-      method: method,
-      body: formData,
+    fetch("http://localhost:8080/graphql", {
+      method: "POST",
+      body: JSON.stringify(graphqlQuery),
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Creating or editing a post failed!");
-        }
         return res.json();
       })
       .then((resData) => {
-        const post = {
-          _id: resData.post._id,
-          title: resData.post.title,
-          content: resData.post.content,
-          creator: resData.post.creator,
-          createdAt: resData.post.createdAt,
-        };
+        console.log("GraphQL Response:", resData); // ADD THIS
+
+        if (resData.errors) {
+          console.error("GraphQL Errors:", resData.errors); // ADD THIS
+          throw new Error(resData.errors[0].message || "Post creation failed.");
+        }
+        const post = resData.data.createPost;
+        // const post = {
+        //   _id: resData.post._id,
+        //   title: resData.post.title,
+        //   content: resData.post.content,
+        //   creator: resData.post.creator,
+        //   createdAt: resData.post.createdAt,
+        // };
 
         setPosts((prevPosts) => {
           if (editPost) {

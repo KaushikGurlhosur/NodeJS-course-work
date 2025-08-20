@@ -80,6 +80,13 @@ app.all(
     rootValue: graphqlResolver,
     graphiql: true,
 
+    context: (req, res) => {
+      return {
+        isAuth: req.raw.isAuth,
+        userId: req.raw.userId,
+      };
+    },
+
     formatError: (err) => {
       if (!err.originalError) {
         return err;
